@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+      - run: dotnet test tests/DroidLab.Devices.Tests -c Release
       - run: dotnet build src/DroidLab.Desktop -c Release
       - run: dotnet publish src/DroidLab.Desktop -c Release -r win-x64 --self-contained true -o publish
       - uses: actions/upload-artifact@v4
