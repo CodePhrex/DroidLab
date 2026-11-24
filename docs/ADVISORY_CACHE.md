@@ -1,0 +1,2 @@
+# Advisory cache and reports
+Successful public searches are cached under the current user's local application data directory. Cache files are keyed by a SHA-256 hash of the normalized keyword, not by device identity. Cached data is explicitly labeled with its retrieval timestamp and may be stale. JSON exports contain the public advisory snapshot and scope disclaimer. Cache files are not signed and are not proof of authenticity. No automatic device-specific CVE matching or Android bulletin ingestion is implemented here.
