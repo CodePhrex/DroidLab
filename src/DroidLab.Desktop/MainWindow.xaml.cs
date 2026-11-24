@@ -1,0 +1,10 @@
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+namespace DroidLab.Desktop;
+public partial class MainWindow : Window {
+ private static readonly string[] Modules = ["Command Center","Device Intelligence","Diagnostics Lab","Troubleshooting Lab","ADB Workbench","Fastboot Lab","Firmware & Flashing","Recovery Center","Backup & Restoration","Technician Center","SIM & Network Lab","Security & CVE Lab","Application Manager","File & Storage Lab","Connectivity Lab","Reporting Center"];
+ public MainWindow(){InitializeComponent(); Navigation.ItemsSource=Modules; Navigation.SelectedIndex=0;}
+ private void Navigate(object sender, SelectionChangedEventArgs e){if(Navigation.SelectedItem is not string name)return; Heading.Text=name; bool ready=name=="Command Center"||name=="ADB Workbench"; Description.Text=ready?"Read-only ADB discovery. Connect an authorized device with USB debugging enabled.":"Planned module — not implemented in this foundation build."; Scan.Visibility=Output.Visibility=ready?Visibility.Visible:Visibility.Collapsed;}
+ private async void Detect(object sender,RoutedEventArgs e){Scan.IsEnabled=false; Output.Text="Detecting devices..."; try{using var process=new Process{StartInfo=new ProcessStartInfo("adb","devices -l"){UseShellExecute=false,RedirectStandardOutput=true,RedirectStandardError=true,CreateNoWindow=true}}; process.Start(); var stdout=process.StandardOutput.ReadToEndAsync(); var stderr=process.StandardError.ReadToEndAsync(); using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(20)); try{await process.WaitForExitAsync(timeout.Token);}catch(OperationCanceledException){if(!process.HasExited)process.Kill(true);throw;} Output.Text=$"Exit code: {process.ExitCode}\n{await stdout}\n{await stderr}";}catch(Exception ex){Output.Text="ADB discovery unavailable: "+ex.Message+"\nInstall official Android platform-tools and add them to PATH.";}finally{Scan.IsEnabled=true;}}
+}
