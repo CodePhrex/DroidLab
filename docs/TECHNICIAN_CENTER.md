@@ -1,0 +1,2 @@
+# Technician Center
+Local manually entered service records with device serial, operation, notes, timestamp and unique ID. Search and JSON export are supported. Data is stored under LocalApplicationData/DroidLab/Technician. Do not enter passwords or unnecessary personal information. Records are plaintext and not tamper-evident. Single application instance is assumed; automatic operation auditing, customer management, encryption and multi-user sessions remain future work.
