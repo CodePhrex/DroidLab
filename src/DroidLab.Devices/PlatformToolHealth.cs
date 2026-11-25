@@ -1,0 +1,6 @@
+using System.Diagnostics;
+namespace DroidLab.Devices;
+public record ToolHealth(string Tool,string Status,string Version);
+public static class PlatformToolHealth{
+ public static async Task<ToolHealth> CheckAsync(string tool){if(tool is not ("adb" or "fastboot"))throw new ArgumentException("Unsupported tool");try{using var p=new Process{StartInfo=new ProcessStartInfo(tool){UseShellExecute=false,RedirectStandardOutput=true,RedirectStandardError=true,CreateNoWindow=true}};p.StartInfo.ArgumentList.Add("version");p.Start();var output=p.StandardOutput.ReadToEndAsync();var error=p.StandardError.ReadToEndAsync();using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(5));try{await p.WaitForExitAsync(timeout.Token);}catch(OperationCanceledException){if(!p.HasExited)p.Kill(true);return new(tool,"Timed out","");}var version=(await output).Trim();var err=(await error).Trim();return new(tool,p.ExitCode==0?"Responding":$"Exit {p.ExitCode}",version.Length>0?version:err);}catch(Exception ex){return new(tool,"Unavailable",ex.Message);}}
+}
