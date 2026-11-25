@@ -1,0 +1,21 @@
+{
+  "canvas": "#0B1119",
+  "surface": "#182433",
+  "accent": "#00E5B0",
+  "blue": "#398CFF",
+  "ink": "#F2F6FC",
+  "spacing": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32
+  ],
+  "radius": [
+    4,
+    8,
+    12
+  ],
+  "motionMs": 200
+}
