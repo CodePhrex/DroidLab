@@ -1,0 +1,2 @@
+# Sprint 29 first increment
+Wireless ADB uses explicit IPv4 endpoints, six-digit pairing codes via stdin, mDNS service listing and explicit connect/disconnect. Pairing requires user interaction on the phone. ADB authorization remains enforced by the existing actionable picker. Fastboot inspection rechecks discovery and reads only is-userspace and product. MTP is not yet implemented in this increment. No flashing, automatic pairing, network scanning or bypass. Platform tools resolved through PATH; physical protocol acceptance pending.

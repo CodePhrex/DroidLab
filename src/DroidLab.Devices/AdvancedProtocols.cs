@@ -1,0 +1,14 @@
+using System.Diagnostics;
+using System.Net;
+using System.Text.RegularExpressions;
+namespace DroidLab.Devices;
+public static class AdvancedProtocols{
+ public static bool ValidEndpoint(string value){var i=value.LastIndexOf(':');return i>0&&IPAddress.TryParse(value[..i],out var ip)&&ip.AddressFamily==System.Net.Sockets.AddressFamily.InterNetwork&&Regex.IsMatch(value[..i],@"^\d{1,3}(\.\d{1,3}){3}$")&&int.TryParse(value[(i+1)..],out var port)&&port is >0 and <=65535;}
+ public static bool ValidPairCode(string value)=>Regex.IsMatch(value,@"\A[0-9]{6}\z");
+ public static string FastbootMode(string raw){var m=Regex.Match(raw,@"(?im)^\s*(?:\(bootloader\)\s*)?is-userspace:\s*(yes|no)\s*$");return !m.Success?"Unknown":m.Groups[1].Value.Equals("yes",StringComparison.OrdinalIgnoreCase)?"Fastbootd":"Bootloader Fastboot";}
+ static async Task<string> Run(string tool,string[] args,string? secret=null){using var p=new Process{StartInfo=new ProcessStartInfo(tool){UseShellExecute=false,RedirectStandardOutput=true,RedirectStandardError=true,RedirectStandardInput=true,CreateNoWindow=true}};foreach(var arg in args)p.StartInfo.ArgumentList.Add(arg);p.Start();var stdout=p.StandardOutput.ReadToEndAsync();var stderr=p.StandardError.ReadToEndAsync();using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(20));try{if(secret!=null)await p.StandardInput.WriteLineAsync(secret.AsMemory(),timeout.Token);p.StandardInput.Close();await p.WaitForExitAsync(timeout.Token);}catch(OperationCanceledException){if(!p.HasExited)p.Kill(true);throw new TimeoutException("Platform tool timed out.");}var result=(await stdout)+"\n"+(await stderr);if(secret!=null)result=result.Replace(secret,"[redacted]");if(p.ExitCode!=0)throw new InvalidOperationException(result);return result;}
+ public static Task<string> Pair(string endpoint,string code){if(!ValidEndpoint(endpoint)||!ValidPairCode(code))throw new ArgumentException("Invalid IPv4 endpoint or six-digit pairing code.");return Run("adb",["pair",endpoint],code);}
+ public static Task<string> Connect(string endpoint,bool disconnect=false){if(!ValidEndpoint(endpoint))throw new ArgumentException("Invalid IPv4 endpoint.");return Run("adb",[disconnect?"disconnect":"connect",endpoint]);}
+ public static Task<string> DiscoverWireless()=>Run("adb",["mdns","services"]);
+ public static async Task<string> InspectFastboot(Device device){if(device.Transport!="Fastboot"||device.State!="fastboot")throw new ArgumentException("Select a Fastboot device.");var fresh=await Discovery.ScanAsync("Fastboot");if(fresh.Error!=null||!fresh.Devices.Any(d=>d.Serial==device.Serial&&d.State=="fastboot"))throw new InvalidOperationException("Device unavailable.");var mode=await Run("fastboot",["-s",device.Serial,"getvar","is-userspace"]);var product=await Run("fastboot",["-s",device.Serial,"getvar","product"]);return FastbootMode(mode)+"\n"+mode+"\n"+product;}
+}
