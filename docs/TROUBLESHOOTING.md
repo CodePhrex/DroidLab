@@ -1,0 +1,2 @@
+# Troubleshooting Lab
+Select an authorized online ADB device and run the consolidated assessment. Battery charge, temperature, reported health, /data usage and MemAvailable are interpreted using conservative heuristic thresholds. Missing or malformed data is unknown. These are snapshots, not confirmed hardware faults or measured battery capacity. No device writes, automatic repairs or deletion occur. Export is JSON and may contain device serial; handle locally. Physical validation and OEM-specific thresholds remain pending.
