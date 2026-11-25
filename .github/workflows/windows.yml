@@ -27,3 +27,18 @@ jobs:
           name: DroidLab-win-x64
           path: publish/
           if-no-files-found: error
+      - name: Install Inno Setup
+        run: |
+          if (!(Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - name: Package release candidate
+        run: ./installer/Package.ps1
+      - name: Installer smoke test
+        run: ./installer/Smoke-Test.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DroidLab-release-candidate
+          path: dist/
+          if-no-files-found: error
