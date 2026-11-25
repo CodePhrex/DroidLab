@@ -1,0 +1,2 @@
+# Workspace refinement
+Persistent output pane with adjustable splitter, keyboard-accessible navigation, and detached read-only output snapshot. Copy and clear controls act on current output. Detached snapshot is not live telemetry or an interactive shell. No simulated device data. Visual acceptance and further device cards, theme and telemetry work remain.
