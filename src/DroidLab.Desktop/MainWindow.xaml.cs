@@ -26,7 +26,7 @@ public partial class MainWindow : Window {
  private readonly System.Windows.Threading.DispatcherTimer hardwareDebounce=new(){Interval=TimeSpan.FromMilliseconds(750)};
  private bool hardwareBusy;
  protected override void OnSourceInitialized(EventArgs e){base.OnSourceInitialized(e);hardwareSource=System.Windows.Interop.HwndSource.FromHwnd(new System.Windows.Interop.WindowInteropHelper(this).Handle);hardwareSource?.AddHook(HardwareMessage);hardwareDebounce.Tick+=(a,b)=>{hardwareDebounce.Stop();if(HardwareMonitor.IsChecked==true)_=ReadHardware(false);};}
- protected override void OnClosed(EventArgs e){hardwareDebounce.Stop();hardwareSource?.RemoveHook(HardwareMessage);base.OnClosed(e);}
+ protected override void OnClosed(EventArgs e){portableBrowser?.Dispose();hardwareDebounce.Stop();hardwareSource?.RemoveHook(HardwareMessage);base.OnClosed(e);}
  private IntPtr HardwareMessage(IntPtr hwnd,int msg,IntPtr wParam,IntPtr lParam,ref bool handled){if(msg==0x219&&HardwareMonitor?.IsChecked==true&&(wParam.ToInt64() is 7 or 0x8000 or 0x8004)){hardwareDebounce.Stop();hardwareDebounce.Start();}return IntPtr.Zero;}
  private async void RefreshHardware(object sender,RoutedEventArgs e)=>await ReadHardware(true);
  private async Task ReadHardware(bool tools){if(hardwareBusy)return;hardwareBusy=true;HardwareRefresh.IsEnabled=false;try{var rows=await Task.Run(WindowsUsbInventory.Scan);HardwareCards.ItemsSource=rows;HardwareStatus.Text=$"{rows.Count} USB device nodes — {DateTime.Now:g} (interfaces may repeat)";if(tools){var checks=await Task.WhenAll(PlatformToolHealth.CheckAsync("adb"),PlatformToolHealth.CheckAsync("fastboot"));ToolStatus.Text=string.Join("\n\n",checks.Select(x=>$"{x.Tool}: {x.Status}\n{x.Version}"));}}catch(Exception ex){HardwareCards.ItemsSource=null;HardwareStatus.Text="Hardware inventory unavailable: "+ex.Message;}finally{hardwareBusy=false;HardwareRefresh.IsEnabled=true;}}
@@ -36,6 +36,13 @@ public partial class MainWindow : Window {
  private async void DisconnectWireless(object sender,RoutedEventArgs e)=>await ProtocolOperation(()=>AdvancedProtocols.Connect(WirelessEndpoint.Text.Trim(),true));
  private async void DiscoverWireless(object sender,RoutedEventArgs e)=>await ProtocolOperation(AdvancedProtocols.DiscoverWireless);
  private async void InspectFastbootMode(object sender,RoutedEventArgs e)=>await ProtocolOperation(()=>DeviceCards.SelectedItem is Device d?AdvancedProtocols.InspectFastboot(d):Task.FromResult("Select a Fastboot device card."));
+ private PortableBrowser? portableBrowser;
+ private void PortableAction(Action action){if(PortableConsent.IsChecked!=true){Output.Text="Confirm authorization first.";return;}try{portableBrowser??=new PortableBrowser();action();}catch(Exception ex){Output.Text=ex.Message;}}
+ private void PortableRoot(object sender,RoutedEventArgs e)=>PortableAction(()=>PortableItems.ItemsSource=portableBrowser!.Root());
+ private void PortableOpen(object sender,RoutedEventArgs e)=>PortableAction(()=>{if(PortableItems.SelectedItem is PortableEntry item)PortableItems.ItemsSource=portableBrowser!.Open(item);});
+ private void PortableBack(object sender,RoutedEventArgs e)=>PortableAction(()=>PortableItems.ItemsSource=portableBrowser!.Back());
+ private void PortableCopy(object sender,RoutedEventArgs e)=>PortableAction(()=>{if(PortableItems.SelectedItem is not PortableEntry item||item.Folder)return;var dialog=new Microsoft.Win32.OpenFolderDialog();if(dialog.ShowDialog()==true){portableBrowser!.CopyTo(item,dialog.FolderName);Output.Text="Windows copy requested; completion not verified."; }});
+ private async void InspectPartition(object sender,RoutedEventArgs e)=>await ProtocolOperation(()=>DeviceCards.SelectedItem is Device d?AdvancedProtocols.InspectPartition(d,PartitionName.Text.Trim()):Task.FromResult("Select a Fastboot device."));
  private readonly CommunicationEngine communication=CommunicationEngine.Default();
  private readonly System.Windows.Threading.DispatcherTimer discoveryTimer=new(){Interval=TimeSpan.FromSeconds(10)};
  private void AutoDiscoveryChanged(object sender,RoutedEventArgs e){if(AutoDiscovery.IsChecked==true)discoveryTimer.Start();else discoveryTimer.Stop();}
