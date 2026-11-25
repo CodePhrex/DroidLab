@@ -1,0 +1,2 @@
+# SIM, Network and Connectivity Lab
+Select an authorized online ADB device and run the network snapshot. Reads SIM state, carrier, radio type, Wi-Fi/Bluetooth settings and airplane mode through fixed read-only queries. No IMEI, IMSI, ICCID, SSID or MAC address queries. Values can be stale, unsupported or multi-SIM. Enabled settings do not establish actual connectivity, signal strength or internet access. JSON export contains observations and timestamp. No carrier unlocking, settings writes, or active network probes. Hardware validation pending.
