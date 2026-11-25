@@ -35,6 +35,8 @@ jobs:
           }
       - name: Package release candidate
         run: ./installer/Package.ps1
+      - name: Verify release artifacts
+        run: ./installer/Verify-Artifacts.ps1
       - name: Installer smoke test
         run: ./installer/Smoke-Test.ps1
       - uses: actions/upload-artifact@v4
