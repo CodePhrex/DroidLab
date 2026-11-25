@@ -1,3 +1,4 @@
+using System.IO;
 using System.Runtime.InteropServices;
 namespace DroidLab.Desktop;
 internal sealed record PortableEntry(string Name,string Type,bool Folder,object Item);
