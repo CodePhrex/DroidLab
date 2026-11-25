@@ -3,6 +3,6 @@ public record OemProfile(string Manufacturer,string SuggestedTransport,bool Flas
 public static class OemCompatibility {
  public static OemProfile Identify(string manufacturer){
  var name=manufacturer.Trim().ToLowerInvariant();
- return name switch {"samsung"=>new("Samsung","Download Mode (OEM-specific)",false),"google"=>new("Google","Fastboot / Fastbootd",false),"motorola"=>new("Motorola","Fastboot (model dependent)",false),"oneplus"=>new("OnePlus","Fastboot (model dependent)",false),"xiaomi"=>new("Xiaomi","Fastboot (model dependent)",false),_=>new(manufacturer,"Unknown; consult OEM documentation",false)};
+ return name switch {"samsung"=>new("Samsung","Download Mode (OEM-specific)",false),"google"=>new("Google","Fastboot / Fastbootd",false),"motorola"=>new("Motorola","Fastboot (model dependent)",false),"oneplus"=>new("OnePlus","Fastboot (model dependent)",false),"xiaomi"=>new("Xiaomi","Fastboot (model dependent)",false),"nothing"=>new("Nothing","Fastboot (model dependent)",false),"oppo"=>new("OPPO","OEM-specific; consult documentation",false),"realme"=>new("Realme","OEM-specific; consult documentation",false),"vivo"=>new("Vivo","OEM-specific; consult documentation",false),_=>new(manufacturer,"Unknown; consult OEM documentation",false)};
  }
 }
