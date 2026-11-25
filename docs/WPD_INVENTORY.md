@@ -1,0 +1,2 @@
+# Native WPD inventory
+Enumerates device IDs and friendly names through IPortableDeviceManager, with bounded allocation and COM memory cleanup. UI shows names only. WPD presence does not prove MTP. Native object enumeration, resource streams, transfer UI and physical acceptance remain pending. Shell copy remains unverified.
