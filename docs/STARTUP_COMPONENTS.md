@@ -1,0 +1,2 @@
+# UI-02 / UI-03 initial increment
+Startup window uses original vector emblem and indeterminate initialization progress, not fabricated percentages. Main window construction is dispatched after splash render. Shared resource dictionary introduces primary action, progress, slider and password styles. Native Windows icon, rotary controls, radial meters, full input templates, reduced-motion acceptance and screenshots remain pending.
