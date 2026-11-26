@@ -3,4 +3,29 @@
 <Style TargetType="ProgressBar"><Setter Property="Foreground" Value="{DynamicResource Accent}"/><Setter Property="Background" Value="{DynamicResource Edge}"/><Setter Property="MinHeight" Value="6"/></Style>
 <Style TargetType="Slider"><Setter Property="Foreground" Value="{DynamicResource Accent}"/><Setter Property="Margin" Value="0,8"/><Setter Property="MinHeight" Value="28"/></Style>
 <Style TargetType="PasswordBox"><Setter Property="Background" Value="{DynamicResource Surface}"/><Setter Property="Foreground" Value="{DynamicResource Ink}"/><Setter Property="BorderBrush" Value="{DynamicResource Edge}"/><Setter Property="Padding" Value="9"/></Style>
+
+<!-- Retain native editing, selection, popup and keyboard behavior. -->
+<Style x:Key="DroidLabTextInput" TargetType="TextBox">
+  <Setter Property="Background" Value="{DynamicResource Surface}"/>
+  <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+  <Setter Property="BorderBrush" Value="{DynamicResource Edge}"/>
+  <Setter Property="CaretBrush" Value="{DynamicResource Ink}"/>
+  <Setter Property="Padding" Value="9,6"/>
+  <Setter Property="MinHeight" Value="32"/>
+  <Style.Triggers>
+    <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter Property="BorderBrush" Value="{DynamicResource Accent}"/></Trigger>
+    <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.65"/></Trigger>
+  </Style.Triggers>
+</Style>
+<Style x:Key="DroidLabDropdown" TargetType="ComboBox">
+  <Setter Property="Background" Value="{DynamicResource Surface}"/>
+  <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+  <Setter Property="BorderBrush" Value="{DynamicResource Edge}"/>
+  <Setter Property="Padding" Value="9,6"/>
+  <Setter Property="MinHeight" Value="32"/>
+  <Style.Triggers>
+    <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter Property="BorderBrush" Value="{DynamicResource Accent}"/></Trigger>
+    <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.65"/></Trigger>
+  </Style.Triggers>
+</Style>
 </ResourceDictionary>
