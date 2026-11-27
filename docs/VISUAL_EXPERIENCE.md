@@ -13,3 +13,8 @@ Approved November 25, 2026. Prioritize UI-01–UI-08 before resuming Sprint 29. 
 | UI-08 | Accessibility, performance, actual screenshots and interaction acceptance |
 
 Palette: canvas #0B1119, surface #182433, accent #00E5B0, blue #398CFF, ink #F2F6FC. Orbitron/Inter with Segoe UI fallback. Use semantic dynamic resources, visible keyboard focus, reduced motion, unknown data states, no fabricated telemetry. Preserve light theme. Device thumbnails must use licensed assets or original generic vectors. Controls must support keyboard interaction and accessible names. CI is necessary but not visual acceptance. Track each stage separately; do not resume Sprint 29 before UI acceptance.
+
+## Implementation evidence (2026-11-27)
+- UI-01/02: branding, splash and native icon foundations merged (PRs #41–42); visual acceptance pending.
+- UI-03: control foundations and workspace integration merged (PRs #43–48); Windows CI #96 successful for PR #48. Static regression checks proposed; runtime keyboard, accessibility and visual acceptance pending.
+- UI-04–08: pending. Sprint 29 remains deferred.
