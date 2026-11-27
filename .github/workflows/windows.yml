@@ -19,6 +19,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           dotnet restore src/DroidLab.Desktop -p:NuGetAudit=true -p:NuGetAuditMode=all '-p:WarningsAsErrors=NU1903%3BNU1904'
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Verify visual control integration
+        run: ./tests/Verify-VisualControls.ps1
       - run: dotnet test tests/DroidLab.Devices.Tests -c Release
       - run: dotnet build src/DroidLab.Desktop -c Release
       - run: dotnet publish src/DroidLab.Desktop -c Release -r win-x64 --self-contained true -o publish
