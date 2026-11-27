@@ -23,6 +23,8 @@ jobs:
         run: ./tests/Verify-VisualControls.ps1
       - run: dotnet test tests/DroidLab.Devices.Tests -c Release
       - run: dotnet build src/DroidLab.Desktop -c Release
+      - name: Run WPF control smoke checks
+        run: dotnet run --project tests/DroidLab.VisualSmoke -c Release
       - run: dotnet publish src/DroidLab.Desktop -c Release -r win-x64 --self-contained true -o publish
       - uses: actions/upload-artifact@v4
         with:
