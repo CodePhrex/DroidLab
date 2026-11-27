@@ -22,6 +22,8 @@ internal static class Program
         knob.Value = -1;
         Check(knob.Value == 10, "Lower bound");
 
+        CheckPointerMapping(knob);
+
         var meter = new RadialMeter { Minimum = 0, Maximum = 100 };
         AutomationProperties.SetName(meter, "Battery charge");
         var meterPeer = UIElementAutomationPeer.CreatePeerForElement(meter) ?? throw new Exception("Missing meter automation peer");
@@ -37,6 +39,35 @@ internal static class Program
         meter.IsIndeterminate = true;
         Check(meterPeer.GetPattern(PatternInterface.RangeValue) == null, "Indeterminate reading hides numeric range");
         Console.WriteLine("WPF runtime control smoke checks passed.");
+    }
+
+    private static void CheckPointerMapping(RotaryKnob knob)
+    {
+        knob.Measure(new Size(100, 100));
+        knob.Arrange(new Rect(0, 0, 100, 100));
+        var method = typeof(RotaryKnob).GetMethod("SetFromPoint",
+            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+            ?? throw new Exception("Missing pointer mapping handler");
+        void PointAt(double fraction)
+        {
+            var angle = (135 + 270 * fraction) * Math.PI / 180;
+            method.Invoke(knob, new object[] { new Point(knob.ActualWidth / 2 + 30 * Math.Cos(angle),
+                knob.ActualHeight / 2 + 30 * Math.Sin(angle)) });
+        }
+        knob.IsSnapToTickEnabled = true;
+        knob.TickFrequency = 5;
+        PointAt(.26);
+        Check(knob.Value == 25, "Pointer snaps to frequency");
+        knob.Ticks = new System.Windows.Media.DoubleCollection { 18, 42 };
+        PointAt(.60);
+        Check(knob.Value == 42, "Pointer respects explicit ticks");
+        PointAt(.99);
+        Check(knob.Value == 60, "Pointer preserves upper endpoint");
+        PointAt(.01);
+        Check(knob.Value == 10, "Pointer preserves lower endpoint");
+        knob.IsSnapToTickEnabled = false;
+        PointAt(.26);
+        Check(Math.Abs(knob.Value - 23) < .0001, "Pointer remains continuous when snapping disabled");
     }
 
     private static void Check(bool condition, string label)

@@ -16,5 +16,5 @@ Palette: canvas #0B1119, surface #182433, accent #00E5B0, blue #398CFF, ink #F2F
 
 ## Implementation evidence (2026-11-27)
 - UI-01/02: branding, splash and native icon foundations merged (PRs #41–42); visual acceptance pending.
-- UI-03: control foundations and workspace integration merged (PRs #43–48); Windows CI #96 successful for PR #48. Static regression checks proposed; runtime keyboard, accessibility and visual acceptance pending.
+- UI-03: control foundations and workspace integration merged (PRs #43–48); Windows CI #96 successful for PR #48. PR #49 added static regression checks; PR #50 added runtime WPF accessibility and range smoke checks; PR #51 corrected pointer tick snapping and focus redraw (Windows CI #102 successful). Dedicated pointer mapping regression checks are proposed in this branch; physical interaction, screenshots and visual acceptance remain pending.
 - UI-04–08: pending. Sprint 29 remains deferred.
