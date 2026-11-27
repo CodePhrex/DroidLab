@@ -16,5 +16,9 @@ Palette: canvas #0B1119, surface #182433, accent #00E5B0, blue #398CFF, ink #F2F
 
 ## Implementation evidence (2026-11-27)
 - UI-01/02: branding, splash and native icon foundations merged (PRs #41–42); visual acceptance pending.
-- UI-03: control foundations and workspace integration merged (PRs #43–48); Windows CI #96 successful for PR #48. PR #49 added static regression checks; PR #50 added runtime WPF accessibility and range smoke checks; PR #51 corrected pointer tick snapping and focus redraw (Windows CI #102 successful). Dedicated pointer mapping regression checks are proposed in this branch; physical interaction, screenshots and visual acceptance remain pending.
+- UI-03: control foundations and workspace integration merged (PRs #43–48); Windows CI #96 successful for PR #48. PR #49 added static regression checks; PR #50 added runtime WPF accessibility and range smoke checks; PR #51 corrected pointer tick snapping and focus redraw (Windows CI #102 successful). Dedicated pointer mapping regression checks merged in PR #52 (Windows CI run 46051489168, successful for head 8c5e28115510b7d83b7cf9862ab0ef391f45a0c2); physical interaction, screenshots and visual acceptance remain pending.
 - UI-04–08: pending. Sprint 29 remains deferred.
+
+## UI-03 acceptance candidate
+- [Windows x64 artifact](https://github.com/CodePhrex/DroidLab/actions/runs/46051489168/artifacts/15224512285) (PR #52 build; artifact metadata verified 2026-11-27).
+- On Windows, verify splash and icon, keyboard focus, knob pointer snapping and endpoints, meter unknown states, inputs and dropdowns in both themes. Capture actual screenshots and record pass/fail with build SHA. Do not mark visual acceptance based on CI alone.
