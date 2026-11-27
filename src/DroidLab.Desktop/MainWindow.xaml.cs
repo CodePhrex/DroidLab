@@ -45,6 +45,7 @@ public partial class MainWindow : Window {
  private async void InspectPartition(object sender,RoutedEventArgs e)=>await ProtocolOperation(()=>DeviceCards.SelectedItem is Device d?AdvancedProtocols.InspectPartition(d,PartitionName.Text.Trim()):Task.FromResult("Select a Fastboot device."));
  private readonly CommunicationEngine communication=CommunicationEngine.Default();
  private readonly System.Windows.Threading.DispatcherTimer discoveryTimer=new(){Interval=TimeSpan.FromSeconds(10)};
+ private void DiscoveryIntervalChanged(object sender,RoutedPropertyChangedEventArgs<double> e){discoveryTimer.Interval=TimeSpan.FromSeconds(Math.Clamp(Math.Round(e.NewValue/5)*5,10,60));}
  private void AutoDiscoveryChanged(object sender,RoutedEventArgs e){if(AutoDiscovery.IsChecked==true)discoveryTimer.Start();else discoveryTimer.Stop();}
  private readonly OperationGate deviceGate=new();
  private ProfessionalReport? professionalReport;
