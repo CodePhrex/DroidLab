@@ -12,6 +12,12 @@ public sealed class RotaryKnob : Slider
 {
     public RotaryKnob()
     {
+        // The native Slider template paints a track over OnRender and intercepts pointer input.
+        // Keep Slider range/automation semantics but render only our circular surface.
+        Template = new ControlTemplate(typeof(RotaryKnob))
+        {
+            VisualTree = new FrameworkElementFactory(typeof(Border))
+        };
         MinWidth = 72;
         MinHeight = 72;
         IsMoveToPointEnabled = true;
@@ -20,6 +26,7 @@ public sealed class RotaryKnob : Slider
     protected override void OnRender(DrawingContext dc)
     {
         base.OnRender(dc);
+        dc.DrawRectangle(Brushes.Transparent, null, new Rect(RenderSize));
         var center = new Point(ActualWidth / 2, ActualHeight / 2);
         var radius = Math.Max(0, Math.Min(ActualWidth, ActualHeight) / 2 - 8);
         if (radius <= 0) return;
