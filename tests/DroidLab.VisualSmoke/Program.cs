@@ -22,6 +22,9 @@ internal static class Program
         knob.Value = -1;
         Check(knob.Value == 10, "Lower bound");
 
+        knob.ApplyTemplate();
+        Check(knob.Template.TargetType == typeof(RotaryKnob), "Rotary-specific template");
+        Check(knob.Template.FindName("PART_Track", knob) == null, "Native slider track absent");
         CheckPointerMapping(knob);
 
         var meter = new RadialMeter { Minimum = 0, Maximum = 100 };
